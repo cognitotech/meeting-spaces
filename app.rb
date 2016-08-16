@@ -6,6 +6,11 @@ require 'sinatra/flash'
 require 'sinatra/reloader'
 require 'active_record'
 require 'awesome_print'
+require 'chronic'
+require 'chronic_duration'
+
+ Time.zone = "Singapore"
+ ActiveRecord::Base.default_timezone = :local
 
 # Load APIs & Models
 Dir['./api/*.rb', './models/*.rb'].each {|file| require file }
