@@ -5,6 +5,7 @@ require 'sinatra/json'
 require 'sinatra/flash'
 require 'sinatra/reloader'
 require 'active_record'
+require 'awesome_print'
 
 # Load APIs & Models
 Dir['./api/*.rb', './models/*.rb'].each {|file| require file }

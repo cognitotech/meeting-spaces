@@ -1,9 +1,5 @@
 namespace '/api/v1' do
 
-  before do
-    @user = User.where(username: params[:user_name]).first_or_create
-  end
-
   get '/' do
     'v1.0'
   end
