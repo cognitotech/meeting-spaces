@@ -1,16 +1,17 @@
 require 'sinatra'
 require 'sinatra/activerecord'
+require 'sinatra/contrib'
 require 'sinatra/json'
 require 'sinatra/flash'
 require 'sinatra/reloader'
 require 'active_record'
 
-enable :sessions
+# Load APIs & Models
+Dir['./api/*.rb', './models/*.rb'].each {|file| require file }
 
-get '/' do
-  'Aloha!'
+class App < Sinatra::Base
 end
 
-class YourApplication < Sinatra::Base
-  register Sinatra::ActiveRecordExtension
+get '/' do
+  'Hi!'
 end

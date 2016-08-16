@@ -65,6 +65,7 @@ DEPENDENCIES
   awesome_print
   rake
   sinatra-activerecord
+  sinatra-contrib
   sinatra-flash
   sinatra-reloader
   slim
