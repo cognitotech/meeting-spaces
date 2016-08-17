@@ -19,7 +19,7 @@ namespace '/api' do
       ap booking
       if booking == SYNTAX_ERROR
         return "`Invalid booking syntax` --- `#{@text}`"
-      elsif booking == INVALID_DATE
+      elsif booking == INVALID_SPACE
         return "Invalid room, try again` --- `#{@text}`"
       elsif booking == INVALID_DATE
         return "`Invalid booking date, try again` --- `#{@text}`"
