@@ -5,7 +5,7 @@ namespace '/api/v1' do
   end
 
   get '/bookings' do
-    return Booking.today.to_json
+    return Booking.upcoming.to_json
   end
 
   get '/spaces' do

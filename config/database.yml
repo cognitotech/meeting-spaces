@@ -1,11 +1,17 @@
 development:
-  adapter: sqlite3
-  database: db/dev.sqlite3
+  adapter: postgresql
+  encoding: unicode
+  database: meetings-dev
   pool: 5
-  timeout: 5000
+
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: meetings-test
+  pool: 5
 
 production:
-  adapter: sqlite3
-  database: db/prod.sqlite3
+  adapter: postgresql
+  encoding: unicode
+  database: meetings-prod
   pool: 5
-  timeout: 5000
