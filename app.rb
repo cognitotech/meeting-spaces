@@ -21,26 +21,24 @@ get '/' do
   'Hi!'
 end
 
-namespace '/admin' do
-  get '/' do
-    @users = User.all
-    @spaces = Space.all
-    @bookings = Booking.all
-    slim :dashboard
-  end
+get '/admin' do
+  @users = User.all
+  @spaces = Space.all
+  @bookings = Booking.all
+  slim :dashboard
+end
 
-  get '/calendar' do
-    @spaces = Space.all
-    filter = params[:filter] || "All"
+get '/calendar' do
+  @spaces = Space.all
+  filter = params[:filter] || "All"
 
-    # Group
-    @weekdays = {"Mon" => [], "Tue" => [], "Wed" => [], "Thu" => [], "Fri" => []}
-    @bookings =  Space.all.pluck(:name).include?(filter) ? Booking.filter_by_space_name(filter) : Booking.upcoming
-    @bookings.each do |b|
-      a = b.start_time.strftime '%a'
-      @weekdays[a].push(b)
-    end
-    ap @weekdays
-    slim :calendar
+  # Group
+  @weekdays = {"Mon" => [], "Tue" => [], "Wed" => [], "Thu" => [], "Fri" => []}
+  @bookings =  Space.all.pluck(:name).include?(filter) ? Booking.filter_by_space_name(filter) : Booking.upcoming
+  @bookings.each do |b|
+    a = b.start_time.strftime '%a'
+    @weekdays[a].push(b)
   end
+  ap @weekdays
+  slim :calendar
 end

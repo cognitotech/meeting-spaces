@@ -42,7 +42,7 @@ namespace '/api' do
 
     # Instruction
     @output << "================================"
-    @output << "View Calendar https://sss-meetings.herokuapp.com/admin/calendar"
+    @output << "View Calendar https://rooms.ssf.vn/calendar"
     @output << "================================"
     @output << "/rooms book `#{Space.first.code}` from `4pm` to `6pm` for `Meeting's purpose`"
     @output << "/rooms book `#{Space.first.code}` from `Friday 4pm` to `6pm` for `Client Visit`"
