@@ -18,11 +18,11 @@ namespace '/api' do
       booking = process_booking
       ap booking
       if booking == SYNTAX_ERROR
-        return '`Invalid booking syntax` --- `#{@text}`'
+        return "`Invalid booking syntax` --- `#{@text}`"
       elsif booking == INVALID_DATE
-        return '`Invalid room, try again` --- `#{@text}`'
+        return "Invalid room, try again` --- `#{@text}`"
       elsif booking == INVALID_DATE
-        return '`Invalid booking date, try again` --- `#{@text}`'
+        return "`Invalid booking date, try again` --- `#{@text}`"
       elsif booking == OVERLAP_BOOKING
         return '`Room not available` (overapped booking)'
       else
