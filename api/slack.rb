@@ -16,7 +16,7 @@ namespace '/api' do
       booking = process_booking
       ap booking
       if booking == SYNTAX_ERROR
-        return '`Invalid booking syntax`'
+        return '`Invalid booking syntax` for `#{@text}`'
       elsif booking == OVERLAP_BOOKING
         return '`Room not available` (overapped booking)'
       else
@@ -72,7 +72,7 @@ namespace '/api' do
 
     # Parse start datetime
     start_dt = Chronic.parse(matches[2], now: Time.now)
-    return SYNTAX_ERROR if start_dt == nil
+    return SYNTAX_ERROR if start_dt == nil || start_dt < Time.now
 
     # Parse end datetime (or assume 1 hour)
     end_dt = start_dt + 3600
