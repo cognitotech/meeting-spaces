@@ -64,7 +64,7 @@ javascript:
       - duration = b.end_time - b.start_time
       - left = ((b.start_time - b.start_time.beginning_of_day - 8*3600) / (12*3600) * 1200).round + 1
       - width = (duration / (12*3600) * 1200).round - 1
-      .booking style="left:#{left}px; width:#{width}px; background-color:#{b.space.color}"
+      .booking style="left:#{left}px; width:#{width}px; background-color:#{b.space.color}" id="#{b.id}"
         b= b.purpose
         br
         i= "#{b.user.name}"
