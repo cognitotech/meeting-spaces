@@ -23,19 +23,35 @@ css:
   }
   .booking {
     position: absolute;
-    background-color: rgba(133, 226, 255, 0.5);
     overflow: hidden;
     height: 50px;
     top: 0px;
-    border: 2px solid rgba(0, 137, 179, 0.4);
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4);
+    border-radius: 6px;
+    border: 2px solid rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    padding: 1px 3px;
+    font-size: 10px;
   }
 
-- @filters.each do |f|
-  - if f == @current_filter
-    a.btn.btn-success= f
-  - else
-    a.btn.btn-primary href="?filter=#{f}"= f
+  .filters a {
+    display: inline-block;
+    margin: 10px 10px 0 0;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 6px;
+  }
+
+javascript:
+  setTimeout("location.reload();",10000);
+
+.filters
+  a Bookings for
+  a style="background-color:#EEE" href="?"
+    | All
+  - Space.all.each do |s|
+    a style="background-color:#{s.color}" href="?filter=#{s.name}"= s.name
 
 - @weekdays.each do |d,bookings|
   .day_row id="#{d}"
@@ -46,10 +62,13 @@ css:
         = v+8
     - bookings.each do |b|
       - duration = b.end_time - b.start_time
-      - left = ((b.start_time - b.start_time.beginning_of_day - 8*3600) / (12*3600) * 1200).round - 1
-      - width = (duration / (12*3600) * 1200).round + 1
-      .booking style="left:#{left}px; width:#{width}px;"
-        = b.space.code
-        = b.start_time.strftime '%a %H:%M'
+      - left = ((b.start_time - b.start_time.beginning_of_day - 8*3600) / (12*3600) * 1200).round + 1
+      - width = (duration / (12*3600) * 1200).round - 1
+      .booking style="left:#{left}px; width:#{width}px; background-color:#{b.space.color}"
+        b= b.purpose
+        br
+        i= "#{b.user.name}"
+        br
+        = b.start_time.strftime '%H:%M'
         |  → 
         = b.end_time.strftime '%H:%M'

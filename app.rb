@@ -31,11 +31,11 @@ namespace '/admin' do
 
   get '/calendar' do
     @spaces = Space.all
-    @current_filter = params[:filter] || "All"
-    @filters = ["All"] + Space.all.pluck(:name)
-    @weekdays = {"Mon" => [], "Tue" => [], "Wed" => [], "Thu" => [], "Fri" => []}
+    filter = params[:filter] || "All"
 
-    @bookings =  Space.all.pluck(:name).include?(@current_filter) ? Booking.filter_by_space_name(@current_filter) : Booking.upcoming
+    # Group
+    @weekdays = {"Mon" => [], "Tue" => [], "Wed" => [], "Thu" => [], "Fri" => []}
+    @bookings =  Space.all.pluck(:name).include?(filter) ? Booking.filter_by_space_name(filter) : Booking.upcoming
     @bookings.each do |b|
       a = b.start_time.strftime '%a'
       @weekdays[a].push(b)
