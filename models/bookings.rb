@@ -13,7 +13,7 @@ class Booking < ActiveRecord::Base
   def self.filter_by_space_name(name)
     s = Space.find_by_name(name)
     if s
-      self.where(space: s)
+      self.upcoming.where(space: s)
     else
       nil
     end
