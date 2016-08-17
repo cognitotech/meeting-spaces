@@ -37,7 +37,7 @@ get '/calendar' do
   @bookings =  Space.all.pluck(:name).include?(filter) ? Booking.filter_by_space_name(filter) : Booking.upcoming
   @bookings.each do |b|
     a = b.start_time.strftime '%a'
-    @weekdays[a].push(b)
+    @weekdays[a].push(b) if @weekdays[a]
   end
   ap @weekdays
   slim :calendar

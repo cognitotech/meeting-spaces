@@ -67,7 +67,7 @@ namespace '/api' do
     return SYNTAX_ERROR if matches.count < 5
 
     # Find the space
-    spc = Space.find_by_code(matches[0])
+    spc = Space.find_by_code(matches[0].upcase)
     return SYNTAX_ERROR if spc == nil
 
     # Parse start datetime
