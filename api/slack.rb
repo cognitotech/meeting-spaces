@@ -20,7 +20,7 @@ namespace '/api' do
       elsif booking == OVERLAP_BOOKING
         return '`Room not available` (overapped booking)'
       else
-        output << ["Successfully made a booking for `#{booking.purpose}` under `#{@user.username}`"]
+        @output << ["Successfully made a booking for `#{booking.purpose}` under `#{@user.username}`"]
       end
     end
 
