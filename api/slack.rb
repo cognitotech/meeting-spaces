@@ -77,8 +77,8 @@ namespace '/api' do
     return INVALID_SPACE if spc == nil
 
     # Parse start datetime
-    start_dt = Chronic.parse(matches[2], now: Time.now)
-    return INVALID_DATE if start_dt == nil || start_dt < Time.now
+    start_dt = Chronic.parse(matches[2], now: Time.zone.now)
+    return INVALID_DATE if start_dt == nil || start_dt < Time.zone.now
 
     # Parse end datetime (or assume 1 hour)
     end_dt = start_dt + 3600
