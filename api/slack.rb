@@ -2,6 +2,8 @@ namespace '/api' do
 
   SYNTAX_ERROR = -1
   OVERLAP_BOOKING = 2
+  INVALID_DATE = 3
+  INVALID_SPACE = 4
 
   before do
     @user = User.where(username: params[:user_name]).first_or_create
@@ -16,7 +18,11 @@ namespace '/api' do
       booking = process_booking
       ap booking
       if booking == SYNTAX_ERROR
-        return '`Invalid booking syntax` for `#{@text}`'
+        return '`Invalid booking syntax` --- `#{@text}`'
+      elsif booking == INVALID_DATE
+        return '`Invalid room, try again` --- `#{@text}`'
+      elsif booking == INVALID_DATE
+        return '`Invalid booking date, try again` --- `#{@text}`'
       elsif booking == OVERLAP_BOOKING
         return '`Room not available` (overapped booking)'
       else
@@ -68,18 +74,18 @@ namespace '/api' do
 
     # Find the space
     spc = Space.find_by_code(matches[0].upcase)
-    return SYNTAX_ERROR if spc == nil
+    return INVALID_SPACE if spc == nil
 
     # Parse start datetime
     start_dt = Chronic.parse(matches[2], now: Time.now)
-    return SYNTAX_ERROR if start_dt == nil || start_dt < Time.now
+    return INVALID_DATE if start_dt == nil || start_dt < Time.now
 
     # Parse end datetime (or assume 1 hour)
     end_dt = start_dt + 3600
     if matches[3] != nil
       end_dt = Chronic.parse(matches[3], now: start_dt)
     end
-    return SYNTAX_ERROR if end_dt == nil || end_dt <= start_dt
+    return INVALID_DATE if end_dt == nil || end_dt <= start_dt
 
     # Parse purpose
     purpose = matches[4]

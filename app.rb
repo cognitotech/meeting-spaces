@@ -39,6 +39,5 @@ get '/calendar' do
     a = b.start_time.strftime '%a'
     @weekdays[a].push(b) if @weekdays[a]
   end
-  ap @weekdays
   slim :calendar
 end
