@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 20160816131619) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "bookings", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "space_id"
@@ -21,7 +24,7 @@ ActiveRecord::Schema.define(version: 20160816131619) do
     t.datetime "end_time"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index ["space_id"], name: "index_bookings_on_space_id"
+    t.index ["space_id"], name: "index_bookings_on_space_id", using: :btree
   end
 
   create_table "spaces", force: :cascade do |t|
@@ -29,8 +32,8 @@ ActiveRecord::Schema.define(version: 20160816131619) do
     t.string   "code",       null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index ["code"], name: "index_spaces_on_code", unique: true
-    t.index ["name"], name: "index_spaces_on_name", unique: true
+    t.index ["code"], name: "index_spaces_on_code", unique: true, using: :btree
+    t.index ["name"], name: "index_spaces_on_name", unique: true, using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -40,7 +43,7 @@ ActiveRecord::Schema.define(version: 20160816131619) do
     t.string   "avatar_url"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index ["username"], name: "index_users_on_username", unique: true
+    t.index ["username"], name: "index_users_on_username", unique: true, using: :btree
   end
 
 end

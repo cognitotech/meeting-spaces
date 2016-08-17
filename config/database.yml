@@ -2,7 +2,7 @@ development:
   adapter: postgresql
   encoding: unicode
   database: meetings-dev
-  pool: 5
+  pool: 50
 
 test:
   adapter: postgresql

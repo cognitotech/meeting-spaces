@@ -1,0 +1,43 @@
+H1 Users
+
+table.table.table-striped.table-bordered
+  tr
+    th Username
+    th Name
+    th Role
+  - @users.each do |u|
+    tr
+      td= u.username
+      td= u.name
+      td TODO
+
+H1 Spaces
+
+table.table.table-striped.table-bordered
+  tr
+    th Code
+    th Name
+  - @spaces.each do |s|
+    tr
+      td= s.code
+      td= s.name
+
+H1 Upcoming bookings
+
+table.table.table-striped.table-bordered
+  tr
+    th Timing
+    th Purpose
+    th By
+    th Space
+    th Booked at
+  - @bookings.each do |b|
+    tr
+      td
+        = b.start_time.strftime '%A %H:%M'
+        |  → 
+        = b.end_time.strftime '%H:%M'
+      td= b.purpose
+      td= b.user.name
+      td= b.space.name
+      td= b.updated_at.strftime '%A %H:%M'

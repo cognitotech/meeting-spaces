@@ -1,0 +1,48 @@
+css:
+  .day_row {
+    width: 1200px;
+    height: 50px;
+    position: relative;
+    background-color: #EFEFEF;
+    margin: 10px 0;
+  }
+  .day_label {
+    position: absolute;
+    color: #CCC;
+    bottom: 0px;
+    height: 25px;
+    left: 0;
+  }
+  .line {
+    position: absolute;
+    top: 0px;
+    width: 1px;
+    background-color: #DDD;
+    height: 50px;
+    color: #DDD;
+  }
+  .booking {
+    position: absolute;
+    background-color: rgba(133, 226, 255, 0.5);
+    overflow: hidden;
+    height: 50px;
+    top: 0px;
+    border: 2px solid #007FA6;
+  }
+
+- @weekdays.each do |d,bookings|
+  .day_row id="#{d}"
+    .day_label
+      = d
+    - (0..11).each do |v|
+      .line style="left:#{v*100}px"
+        = v+8
+    - bookings.each do |b|
+      - duration = b.end_time - b.start_time
+      - left = ((b.start_time - b.start_time.beginning_of_day - 8*3600) / (12*3600) * 1200).round - 1
+      - width = (duration / (12*3600) * 1200).round + 1
+      .booking style="left:#{left}px; width:#{width}px;"
+        = b.space.code
+        = b.start_time.strftime '%a %H:%M'
+        |  → 
+        = b.end_time.strftime '%H:%M'

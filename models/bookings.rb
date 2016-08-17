@@ -2,6 +2,7 @@ class Booking < ActiveRecord::Base
   belongs_to :space
   belongs_to :user
 
+  default_scope { where('end_time > ?', Time.now).order(start_time: :asc) }
   scope :upcoming, -> { where(start_time: (Time.now..Time.now.end_of_week)).order(start_time: :asc) }
 
   def self.overlap?(start_dt, end_dt)
