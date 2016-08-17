@@ -69,7 +69,7 @@ namespace '/api' do
     return SYNTAX_ERROR if spc == nil
 
     # Parse start datetime
-    start_dt = Chronic.parse(matches[2])
+    start_dt = Chronic.parse(matches[2], now: Time.now)
     return SYNTAX_ERROR if start_dt == nil
 
     # Parse end datetime (or assume 1 hour)

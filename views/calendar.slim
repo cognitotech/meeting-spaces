@@ -27,8 +27,15 @@ css:
     overflow: hidden;
     height: 50px;
     top: 0px;
-    border: 2px solid #007FA6;
+    border: 2px solid rgba(0, 137, 179, 0.4);
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4);
   }
+
+- @filters.each do |f|
+  - if f == @current_filter
+    a.btn.btn-success= f
+  - else
+    a.btn.btn-primary href="?filter=#{f}"= f
 
 - @weekdays.each do |d,bookings|
   .day_row id="#{d}"
