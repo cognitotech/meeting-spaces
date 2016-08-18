@@ -41,3 +41,7 @@ get '/calendar' do
   end
   slim :calendar
 end
+
+get '/slack-setup' do
+  slim :slack_setup
+end
