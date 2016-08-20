@@ -8,7 +8,9 @@ namespace '/api' do
   before do
     @user = User.where(username: params[:user_name]).first_or_create
     @text = params[:text]
-    @output = ["*======== Upcoming bookings ========*"]
+    @url  = params[:response_url]
+    @cmd  = params[:command]
+    @output = ""
   end
 
   post '/slack' do
@@ -24,37 +26,62 @@ namespace '/api' do
       elsif booking == INVALID_DATE
         return "`Invalid booking date, try again` --- `#{@text}`"
       elsif booking == OVERLAP_BOOKING
-        return '`Room not available` (overapped booking)'
+        return '`Room not available` (overlapped booking)'
       else
-        @output << ["Successfully made a booking for `#{booking.purpose}` under `#{@user.username}`"]
+        @output = "*Successfully* made a booking for `#{booking.purpose}` under `#{@user.username}`"
       end
     end
+
+    # Send as slack payload to response_url
+    payload = {
+      "text"     => "as of #{Time.now.strftime('%d/%m %H:%M')}",
+      "parse"    => "full",
+      "mrkdwn"   => true,
+      "attachments" => [],
+      "response_type" => "in_channel",
+    }
 
     # List of upcoming bookings
     spaces = Space.all
     spaces.each do |s|
       bookings = s.bookings.upcoming
-      @output << "`#{s.code}` *#{s.name}*"
-      @output << "_ • Free_" if bookings.count == 0
-      bookings.upcoming.each do |b|
-        if b.start_time.today?
-          t = "Today #{b.start_time.strftime('%H:%M')} → #{b.end_time.strftime('%H:%M')}"
-        else
-          t = "#{b.start_time.strftime('%a %H:%M')} → #{b.end_time.strftime('%H:%M')}"
+      a = {
+        "title" => "",
+        "pretext" => "`#{s.code}` *#{s.name}*",
+        "text" => "",
+        "color" => s.color,
+        "mrkdwn_in": ["text", "pretext"]
+      }
+      if bookings.count == 0
+        a["text"] += "\n_• Free_" 
+      else
+        bookings.upcoming.each do |b|
+          if b.start_time.today?
+            t = "Today #{b.start_time.strftime('%H:%M')} → #{b.end_time.strftime('%H:%M')}"
+          else
+            t = "#{b.start_time.strftime('%a %H:%M')} → #{b.end_time.strftime('%H:%M')}"
+          end
+          a["text"] += "\n• #{b.purpose} (by #{b.user.name}) - #{t}"
         end
-        @output << " • #{b.purpose} (by #{b.user.name}) - #{t}"
       end
+      payload["attachments"] << a
     end
 
-    # Instruction
-    @output << "================================"
-    @output << "View Calendar https://rooms.ssf.vn/calendar"
-    @output << "================================"
-    @output << "/rooms book `#{Space.first.code}` from `4pm` to `6pm` for `Meeting's purpose`"
-    @output << "/rooms book `#{Space.last.code }` from `Friday 4pm` to `6pm` for `Client Visit`"
-    @output << "/rooms book `#{Space.last.code }` `tomorrow 4pm` for `Interview`  _(1 hour slot)_"
+    # Include instructions at the end
+    payload["attachments"] << {
+      "title" => "",
+      "pretext" => "_View calendar <http://#{request.host}/calendar|here>_ - Booking instructions below",
+      "text" => "#{@cmd} book `#{Space.first.code}` from `4pm` to `6pm` for `Meeting's purpose`\n
+#{@cmd} book `#{Space.last.code }` from `Friday 4pm` to `6pm` for `Client Visit`\n
+#{@cmd} book `#{Space.last.code }` `tomorrow 4pm` for `Interview` _(this will book 1 hour slot)_",
+      "color" => "#CCC",
+      "mrkdwn_in": ["text", "pretext"]
+    }
+    Thread.new {
+      post_response(payload)
+    }
 
-    @output.join "\n"
+    return @output
   end
 
   def process_booking
@@ -77,8 +104,8 @@ namespace '/api' do
     return INVALID_SPACE if spc == nil
 
     # Parse start datetime
-    start_dt = Chronic.parse(matches[2], now: Time.zone.now)
-    return INVALID_DATE if start_dt == nil || start_dt < Time.zone.now
+    start_dt = Chronic.parse(matches[2], now: Time.now)
+    return INVALID_DATE if start_dt == nil || start_dt < Time.now
 
     # Parse end datetime (or assume 1 hour)
     end_dt = start_dt + 3600
@@ -97,6 +124,13 @@ namespace '/api' do
     else
       return OVERLAP_BOOKING
     end
+  end
+
+  def post_response(payload = {})
+    Thread.new {
+      res = Net::HTTP.post_form(URI(@url), 'payload' => payload.to_json)
+      p res.body
+    }
   end
 
 end

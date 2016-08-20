@@ -7,6 +7,8 @@ require 'sinatra/reloader'
 require 'active_record'
 require 'awesome_print'
 require 'chronic'
+require 'net/http'
+require 'json'
 
 Time.zone = "Hanoi"
 ActiveRecord::Base.default_timezone = :local
