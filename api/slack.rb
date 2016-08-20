@@ -32,16 +32,16 @@ namespace '/api' do
       end
     end
 
-    # Send as slack payload to response_url
+    # Prepare payload
     payload = {
-      "text"     => "as of #{Time.now.strftime('%d/%m %H:%M')}",
+      "text"     => "Bookings as of #{Time.now.strftime('%d/%m %H:%M')}. _View calendar <http://#{request.host}/calendar|here>_.",
       "parse"    => "full",
       "mrkdwn"   => true,
       "attachments" => [],
-      "response_type" => "in_channel",
+      "response_type" => @output.blank? ? "ephemeral" : "in_channel",
     }
 
-    # List of upcoming bookings
+    # List of upcoming bookings, group by spaces
     spaces = Space.all
     spaces.each do |s|
       bookings = s.bookings.upcoming
@@ -68,15 +68,19 @@ namespace '/api' do
     end
 
     # Include instructions at the end
-    payload["attachments"] << {
-      "title" => "",
-      "pretext" => "_View calendar <http://#{request.host}/calendar|here>_ - Booking instructions below",
-      "text" => "#{@cmd} book `#{Space.first.code}` from `4pm` to `6pm` for `Meeting's purpose`\n
-#{@cmd} book `#{Space.last.code }` from `Friday 4pm` to `6pm` for `Client Visit`\n
-#{@cmd} book `#{Space.last.code }` `tomorrow 4pm` for `Interview` _(this will book 1 hour slot)_",
-      "color" => "#CCC",
-      "mrkdwn_in": ["text", "pretext"]
-    }
+    if @output.blank?
+      payload["attachments"] << {
+        "title" => "",
+        "pretext" => "Booking instructions",
+        "text" => "#{@cmd} book `#{Space.first.code}` from `4pm` to `6pm` for `Meeting's purpose`\n
+  #{@cmd} book `#{Space.last.code }` from `Friday 4pm` to `6pm` for `Client Visit`\n
+  #{@cmd} book `#{Space.last.code }` `tomorrow 4pm` for `Interview` _(this will book 1 hour slot)_",
+        "color" => "#CCC",
+        "mrkdwn_in": ["text", "pretext"]
+      }
+    end
+
+    # Send to Slack
     Thread.new {
       post_response(payload)
     }
