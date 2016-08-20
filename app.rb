@@ -10,7 +10,6 @@ require 'chronic'
 require 'net/http'
 require 'json'
 
-Time.zone = "Hanoi"
 ActiveRecord::Base.default_timezone = :local
 
 # Load APIs & Models
