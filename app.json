@@ -22,6 +22,10 @@
     "TZ": {
       "description": "Your current timezone, this is important for datetime parsing",
       "value": "Asia/Ho_Chi_Minh"
-    }
+    },
+    "SECRET_TOKEN": {
+      "description": "A secret key for multiple purposes",
+      "generator": "secret"
+    },
   },
 }

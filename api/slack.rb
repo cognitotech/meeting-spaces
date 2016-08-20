@@ -33,8 +33,9 @@ namespace '/api' do
     end
 
     # Prepare payload
+    token = encrypt({"uid" => @user.id}.to_json)
     payload = {
-      "text"     => "Bookings as of #{Time.now.strftime('%d/%m %H:%M')}. _View calendar <http://#{request.host}/calendar|here>_.",
+      "text"     => "Bookings as of #{Time.now.strftime('%d/%m %H:%M')}. _View calendar <http://#{request.host}/calendar?data=#{token}|here>_.",
       "parse"    => "full",
       "mrkdwn"   => true,
       "attachments" => [],

@@ -1,6 +1,6 @@
 # Manage meeting rooms/spaces via Slack
 
-### Build by Silicon Straits
+### Built by Silicon Straits
 
 ### Deploy to Heroku
 
