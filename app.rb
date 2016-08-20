@@ -35,7 +35,7 @@ get '/calendar' do
   filter = params[:filter] || "All"
 
   # Group
-  @weekdays = {"Mon" => [], "Tue" => [], "Wed" => [], "Thu" => [], "Fri" => []}
+  @weekdays = {"Mon" => [], "Tue" => [], "Wed" => [], "Thu" => [], "Fri" => [], "Sat" => [], "Sun" => []}
   @bookings =  Space.all.pluck(:name).include?(filter) ? Booking.filter_by_space_name(filter) : Booking.upcoming
   @bookings.each do |b|
     a = b.start_time.strftime '%a'
