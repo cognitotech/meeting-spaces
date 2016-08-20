@@ -61,7 +61,7 @@ namespace '/api' do
           else
             t = "#{b.start_time.strftime('%a %H:%M')} → #{b.end_time.strftime('%H:%M')}"
           end
-          a["text"] += "\n• #{b.purpose} (by #{b.user.name}) - #{t}"
+          a["text"] += "\n• #{b.purpose} _(by #{b.user.name})_ - #{t}"
         end
       end
       payload["attachments"] << a
