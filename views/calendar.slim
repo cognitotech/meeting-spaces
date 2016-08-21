@@ -8,6 +8,9 @@ css:
     padding: 5px 10px;
     border-radius: 6px;
   }
+  .fc-toolbar h2 {
+    font-size: 20px;
+  }
 
 javascript:
   setTimeout("location.reload();",30000);
@@ -16,12 +19,12 @@ javascript:
     $('#calendar').fullCalendar({
       defaultView: 'agendaWeek',
       firstDay: 1, // Mon
-      selectable: true,
-      editable: true,
+      // editable: true,
       allDaySlot: false,
-      height: 600,
+      height: 500,
+      scrollTime: '09:00:00',
       minTime: '08:00:00',
-      maxTime: '20:00:00',
+      maxTime: '21:00:00',
       eventSources: [
         '/api/v1/upcoming'
       ],
@@ -31,8 +34,11 @@ javascript:
           end: '20:00',
       },
       eventClick: function(calEvent, jsEvent, view) {
-        // TODO delete this event
+        // Show popup with booking details
         console.log(calEvent);
+        $('#bookingModal').modal();
+        $('#bookingModal .modal-title').text(calEvent.purpose + " @ " + calEvent.space);
+        $('#bookingModal .modal-body').html("booked by <b>" + calEvent.username + "</b><br>From : " + calEvent.start + "<br>To : " +  calEvent.end);
       },
       eventDragStop: function(calEvent, jsEvent, ui, view) {
         console.log(calEvent);
@@ -49,3 +55,16 @@ javascript:
   a Legends
   - Space.all.each do |s|
     a style="background-color:#{s.color}"= s.name
+
+#bookingModal.modal.fade role="dialog" tabindex="-1"
+  .modal-dialog.modal-sm role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+        h4.modal-title#bookingTitle Title
+      .modal-body
+        p Content
+      .modal-footer
+        button.btn.btn-danger type="button" Remove Booking
+        button.btn.btn-default data-dismiss="modal" type="button" Close

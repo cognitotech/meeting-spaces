@@ -16,9 +16,12 @@ namespace '/api/v1' do
     Booking.upcoming.collect do |b|
       {
         :id => b.id,
-        :title => b.purpose + " - " + b.user.username,
+        :title => b.purpose + "\n" + b.user.username,
         :start => b.start_time,
         :end   => b.end_time,
+        :space => b.space.name,
+        :purpose => b.purpose,
+        :username => b.user.username,
         :backgroundColor => b.space.color,
       }
     end.to_json
