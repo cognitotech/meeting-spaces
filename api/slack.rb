@@ -4,6 +4,8 @@ namespace '/api/slack' do
   OVERLAP_BOOKING = 2
   INVALID_DATE = 3
   INVALID_SPACE = 4
+  INVALID_TIME = 5
+  INVALID_PURPOSE = 6
 
   before do
     @user = User.where(username: params[:user_name]).first_or_create
@@ -24,6 +26,10 @@ namespace '/api/slack' do
         return "Invalid room, try again` --- `#{@text}`"
       elsif booking == INVALID_DATE
         return "`Invalid booking date, try again` --- `#{@text}`"
+      elsif booking == INVALID_TIME
+        return "`Invalid booking (time too short), try again` --- `#{@text}`"
+      elsif booking == INVALID_PURPOSE
+        return "`Booking purpose is short, try again` --- `#{@text}`"
       elsif booking == OVERLAP_BOOKING
         return '`Room not available` (overlapped booking)'
       else
@@ -116,9 +122,11 @@ namespace '/api/slack' do
       end_dt = Chronic.parse(matches[3], now: start_dt)
     end
     return INVALID_DATE if end_dt == nil || end_dt <= start_dt
+    return INVALID_TIME if (end_dt - start_dt) < 15*60
 
     # Parse purpose
     purpose = matches[4]
+    return INVALID purpose if purpose.length < 3
 
     # Create a temp booking
     if !spc.bookings.overlap?(start_dt, end_dt)
