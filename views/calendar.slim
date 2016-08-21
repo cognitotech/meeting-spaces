@@ -14,6 +14,7 @@ css:
 
 javascript:
   setTimeout("location.reload();",30000);
+  var focused_booking = {};
   $(document).ready(function() {
     
     $('#calendar').fullCalendar({
@@ -35,7 +36,7 @@ javascript:
       },
       eventClick: function(calEvent, jsEvent, view) {
         // Show popup with booking details
-        console.log(calEvent);
+        focused_booking = calEvent;
         $('#bookingModal').modal();
         $('#bookingModal .modal-title').text(calEvent.purpose + " @ " + calEvent.space);
         $('#bookingModal .modal-body').html("booked by <b>" + calEvent.username + "</b><br>From : " + calEvent.start + "<br>To : " +  calEvent.end);
@@ -48,6 +49,20 @@ javascript:
       }
     });
   });
+
+  function removeBooking() {
+    sure = confirm("Are you sure you want to remove this booking?");
+    if (!sure) return;
+
+    $.ajax({
+      url: '/api/v1/bookings/' + focused_booking.id,
+      type: 'DELETE',
+      success: function(result) {
+        $('#bookingModal').modal('hide');
+        $('#calendar').fullCalendar("refetchEvents");
+      }
+    });
+  }
 
 #calendar
 
@@ -66,5 +81,5 @@ javascript:
       .modal-body
         p Content
       .modal-footer
-        button.btn.btn-danger type="button" Remove Booking
+        button.btn.btn-danger type="button" onclick="javascript:removeBooking();" Remove Booking
         button.btn.btn-default data-dismiss="modal" type="button" Close
