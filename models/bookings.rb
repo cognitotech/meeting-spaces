@@ -5,7 +5,7 @@ class Booking < ActiveRecord::Base
   ACTIVE = 0
   CANCELLED = 1
 
-  default_scope { where('end_time > ?', Time.now).where('state != ?', CANCELLED).order(start_time: :asc) }
+  default_scope { where('end_time > ?', Time.now).where(state: ACTIVE).order(start_time: :asc) }
 
   def self.overlap?(start_dt, end_dt)
     c = self.where('(start_time < ? AND end_time > ?) OR (start_time < ? AND end_time > ?) OR (start_time >= ? AND end_time <= ?)', start_dt, start_dt, end_dt, end_dt, start_dt, end_dt).count
