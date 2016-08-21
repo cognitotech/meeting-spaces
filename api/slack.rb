@@ -4,7 +4,7 @@ namespace '/api/slack' do
   OVERLAP_BOOKING = 2
   INVALID_DATE = 3
   INVALID_SPACE = 4
-  INVALID_TIME = 5
+  INVALID_DURATION = 5
   INVALID_PURPOSE = 6
 
   before do
@@ -26,8 +26,8 @@ namespace '/api/slack' do
         return "Invalid room, try again` --- `#{@text}`"
       elsif booking == INVALID_DATE
         return "`Invalid booking date, try again` --- `#{@text}`"
-      elsif booking == INVALID_TIME
-        return "`Invalid booking (time too short), try again` --- `#{@text}`"
+      elsif booking == INVALID_DURATION
+        return "`Invalid booking time (only 15 mins → 12 hours), try again` --- `#{@text}`"
       elsif booking == INVALID_PURPOSE
         return "`Booking purpose is short, try again` --- `#{@text}`"
       elsif booking == OVERLAP_BOOKING
@@ -122,7 +122,8 @@ namespace '/api/slack' do
       end_dt = Chronic.parse(matches[3], now: start_dt)
     end
     return INVALID_DATE if end_dt == nil || end_dt <= start_dt
-    return INVALID_TIME if (end_dt - start_dt) < 15*60
+    return INVALID_DURATION if (end_dt - start_dt) < 15*60
+    return INVALID_DURATION if (end_dt - start_dt) > 12*3600
 
     # Parse purpose
     purpose = matches[4]
