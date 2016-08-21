@@ -35,24 +35,16 @@ end
 
 get '/calendar' do
   # Parse & clean up parameters
-  filter = params[:filter] || "All"
   if !params[:data].blank?
     begin
       data = JSON.parse(decrypt(params[:data]))
       session["uid"] = data["uid"]
     rescue Exception => e
     end
-    redirect "/calendar?filters=#{filter}"
+    redirect "/calendar"
   end
 
-  # Retrieve bookings and group by weekdays
   @spaces = Space.all
-  @weekdays = {"Mon" => [], "Tue" => [], "Wed" => [], "Thu" => [], "Fri" => [], "Sat" => [], "Sun" => []}
-  @bookings =  Space.all.pluck(:name).include?(filter) ? Booking.filter_by_space_name(filter) : Booking.upcoming
-  @bookings.each do |b|
-    a = b.start_time.strftime '%a'
-    @weekdays[a].push(b) if @weekdays[a]
-  end
   slim :calendar
 end
 

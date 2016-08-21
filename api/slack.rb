@@ -18,7 +18,6 @@ namespace '/api/slack' do
     # Handle booking syntax
     if !@text.blank? && @text.split.first.downcase == "book"
       booking = process_booking
-      ap booking
       if booking == SYNTAX_ERROR
         return "`Invalid booking syntax` --- `#{@text}`"
       elsif booking == INVALID_SPACE
@@ -35,7 +34,7 @@ namespace '/api/slack' do
     # Prepare payload
     token = encrypt({"uid" => @user.id}.to_json)
     payload = {
-      "text"     => "Bookings as of #{Time.now.strftime('%d/%m %H:%M')}. _View calendar <http://#{request.host}/calendar?data=#{token}|here>_.",
+      "text"     => "Bookings as of #{Time.now.strftime('%d/%m %H:%M')}. _<http://#{request.host}/calendar?data=#{token}|View calendar>_.",
       "parse"    => "full",
       "mrkdwn"   => true,
       "attachments" => [],

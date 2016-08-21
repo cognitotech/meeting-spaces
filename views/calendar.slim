@@ -1,39 +1,5 @@
 css:
-  .day_row {
-    width: 1200px;
-    height: 50px;
-    position: relative;
-    background-color: #EFEFEF;
-    margin: 10px 0;
-  }
-  .day_label {
-    position: absolute;
-    color: #CCC;
-    bottom: 0px;
-    height: 25px;
-    left: 0;
-  }
-  .line {
-    position: absolute;
-    top: 0px;
-    width: 1px;
-    background-color: #DDD;
-    height: 50px;
-    color: #DDD;
-  }
-  .booking {
-    position: absolute;
-    overflow: hidden;
-    height: 50px;
-    top: 0px;
-    border-radius: 6px;
-    border: 2px solid rgba(0, 0, 0, 0.4);
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-    padding: 1px 3px;
-    font-size: 10px;
-  }
-
-  .filters a {
+  .legends a {
     display: inline-block;
     margin: 10px 10px 0 0;
     color: black;
@@ -49,43 +15,37 @@ javascript:
     
     $('#calendar').fullCalendar({
       defaultView: 'agendaWeek',
+      firstDay: 1, // Mon
       selectable: true,
+      editable: true,
+      allDaySlot: false,
+      height: 600,
+      minTime: '08:00:00',
+      maxTime: '20:00:00',
       eventSources: [
         '/api/v1/upcoming'
       ],
+      businessHours: {
+          dow: [ 1, 2, 3, 4, 5 ], // Mon-Fri
+          start: '8:00',
+          end: '20:00',
+      },
       eventClick: function(calEvent, jsEvent, view) {
+        // TODO delete this event
+        console.log(calEvent);
+      },
+      eventDragStop: function(calEvent, jsEvent, ui, view) {
+        console.log(calEvent);
+      },
+      eventResize: function(calEvent, delta, revertFunc, jsEvent, ui, view) {
+        console.log(calEvent);
       }
     });
-
   });
 
-
-.filters
-  a Bookings for
-  a style="background-color:#EEE" href="?"
-    | All
-  - Space.all.each do |s|
-    a style="background-color:#{s.color}" href="?filter=#{s.name}"= s.name
-
-- @weekdays.each do |d,bookings|
-  .day_row id="#{d}"
-    .day_label
-      = d
-    - (0..11).each do |v|
-      .line style="left:#{v*100}px"
-        = v+8
-    - bookings.each do |b|
-      - duration = b.end_time - b.start_time
-      - left = ((b.start_time - b.start_time.beginning_of_day - 8*3600) / (12*3600) * 1200).round + 1
-      - width = (duration / (12*3600) * 1200).round - 1
-      .booking style="left:#{left}px; width:#{width}px; background-color:#{b.space.color}" id="#{b.id}"
-        b= b.purpose
-        br
-        i= "#{b.user.name}"
-        br
-        = b.start_time.strftime '%H:%M'
-        |  → 
-        = b.end_time.strftime '%H:%M'
-hr
-
 #calendar
+
+.legends
+  a Legends
+  - Space.all.each do |s|
+    a style="background-color:#{s.color}"= s.name
