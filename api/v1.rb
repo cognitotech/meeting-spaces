@@ -23,13 +23,14 @@ namespace '/api/v1' do
     Booking.all.collect do |b|
       {
         :id => b.id,
-        :title => b.purpose + "\n" + b.user.username,
+        :title => b.purpose,
         :start => b.start_time,
         :end   => b.end_time,
         :space => b.space.name,
         :uid   => b.user.id,
         :purpose => b.purpose,
         :username => b.user.username,
+        :borderColor => b.space.color,
         :backgroundColor => b.space.color,
       }
     end.to_json

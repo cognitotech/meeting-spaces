@@ -1,19 +1,28 @@
 css:
+  .legends {
+    padding-top: 10px;
+  }
   .legends a {
     display: inline-block;
-    margin: 10px 10px 0 0;
+    margin: 0px 5px 0 0;
     color: black;
     text-decoration: none;
     font-weight: bold;
-    padding: 5px 10px;
-    border-radius: 6px;
+    padding: 3px 10px;
+    border-radius: 4px;
+  }
+  #calendar {
+    margin-top: 5px;
   }
   .fc-toolbar h2 {
     font-size: 20px;
   }
+  a.fc-event {
+    cursor: pointer;
+  }
 
 javascript:
-  setTimeout("location.reload();",30000);
+  setTimeout("location.reload();", 60000);
   var focused_booking = {};
   var uid = #{session[:uid]||0};
   $(document).ready(function() {
@@ -24,15 +33,17 @@ javascript:
       // editable: true,
       allDaySlot: false,
       height: 500,
+      defaultDate: "#{(Time.now + 12*3600)}",
+      nowIndicator: true,
       scrollTime: '09:00:00',
-      minTime: '08:00:00',
+      minTime: '07:00:00',
       maxTime: '21:00:00',
       eventSources: [
         '/api/v1/upcoming'
       ],
       businessHours: {
           dow: [ 1, 2, 3, 4, 5 ], // Mon-Fri
-          start: '8:00',
+          start: '9:00',
           end: '20:00',
       },
       eventClick: function(calEvent, jsEvent, view) {
@@ -42,12 +53,10 @@ javascript:
         e = moment(calEvent.end).format('HH:mm');
         $('#bookingModal').modal();
         $('#bookingModal .modal-title').text(calEvent.purpose + " @ " + calEvent.space);
-        $('#bookingModal .modal-body').html("booked by <b>" + calEvent.username + "</b><br>" + s + " → " +  e);
-        if (calEvent.uid == uid) {
-          $("#bookingModal button#remove").show();
-        } else {
-          $("#bookingModal button#remove").hide();
-        }
+        $('#bookingModal .modal-body').html("<i>booked by <b>" + calEvent.username + "</b></i><br>" + s + " → " +  e);
+        isOwner = calEvent.uid == uid;
+        $("#bookingModal button#remove").toggle(isOwner);
+        $("#bookingModal button#owner").toggle(!isOwner);
       },
       eventDragStop: function(calEvent, jsEvent, ui, view) {
         console.log(calEvent);
@@ -75,9 +84,10 @@ javascript:
 #calendar
 
 .legends
-  a Legends
+  a Room colors
   - Space.all.each do |s|
     a style="background-color:#{s.color}"= s.name
+  button.btn.btn-info.btn-xs.pull-right data-toggle="modal" data-target="#helpModal" type="button" ?
 
 #bookingModal.modal.fade role="dialog" tabindex="-1"
   .modal-dialog.modal-sm role="document"
@@ -90,4 +100,18 @@ javascript:
         p Content
       .modal-footer
         button.btn.btn-danger#remove type="button" onclick="javascript:removeBooking();" Remove Booking
+        button.btn#owner Only owner can remove
+        button.btn.btn-default data-dismiss="modal" type="button" Close
+
+#helpModal.modal.fade role="dialog" tabindex="-1"
+  .modal-dialog role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label="Close" data-dismiss="modal" type="button"
+          span aria-hidden="true" &times;
+        h4.modal-title#bookingTitle Help & Tips
+      .modal-body
+        p • Click on booking name to show more details and cancel booking (if you are owner).
+        p • More bookings might be hidden, you can scroll the calendar to show other timing.
+      .modal-footer
         button.btn.btn-default data-dismiss="modal" type="button" Close
