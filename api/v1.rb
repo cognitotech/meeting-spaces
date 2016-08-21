@@ -20,7 +20,15 @@ namespace '/api/v1' do
   end
 
   get '/upcoming' do
-    Booking.all.collect do |b|
+    s = Chronic.parse(params[:start], guess: :begin)
+    e = Chronic.parse(params[:end], guess: :end)
+    if s!=nil && e!=nil
+      bookings = Booking.where('start_time >= ? AND end_time <=?', s, e)
+    else
+      bookings = Booking.all
+    end
+
+    bookings.includes(:space, :user).collect do |b|
       {
         :id => b.id,
         :title => b.purpose,
