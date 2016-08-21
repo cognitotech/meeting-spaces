@@ -84,10 +84,16 @@ javascript:
 #calendar
 
 .legends
-  a Room colors
+  a.hidden-xs Room colors
   - Space.all.each do |s|
     a style="background-color:#{s.color}"= s.name
   button.btn.btn-info.btn-xs.pull-right data-toggle="modal" data-target="#helpModal" type="button" ?
+  - if !session[:uid].blank?
+    hr.visible-xs-block
+    .btn.btn-xs.pull-right
+      | Logged in as 
+      b= User.find(session[:uid]).username
+
 
 #bookingModal.modal.fade role="dialog" tabindex="-1"
   .modal-dialog.modal-sm role="document"
@@ -109,7 +115,7 @@ javascript:
       .modal-header
         button.close aria-label="Close" data-dismiss="modal" type="button"
           span aria-hidden="true" &times;
-        h4.modal-title#bookingTitle Help & Tips
+        h4.modal-title#bookingTitle Tips
       .modal-body
         p • Click on booking name to show more details and cancel booking (if you are owner).
         p • More bookings might be hidden, you can scroll the calendar to show other timing.

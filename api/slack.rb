@@ -72,8 +72,8 @@ namespace '/api/slack' do
         "title" => "",
         "pretext" => "Booking instructions",
         "text" => "#{@cmd} book `#{Space.first.code}` from `4pm` to `6pm` for `Meeting's purpose`\n
-  #{@cmd} book `#{Space.last.code }` from `Friday 4pm` to `6pm` for `Client Visit`\n
-  #{@cmd} book `#{Space.last.code }` `tomorrow 4pm` for `Interview` _(this will book 1 hour slot)_",
+#{@cmd} book `#{Space.last.code }` from `Friday 4pm` to `6pm` for `Client Visit`\n
+#{@cmd} book `#{Space.last.code }` `tomorrow 4pm` for `Interview` _(this will book 1 hour slot)_",
         "color" => "#CCC",
         "mrkdwn_in": ["text", "pretext"]
       }
