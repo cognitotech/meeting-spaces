@@ -15,6 +15,7 @@ css:
 javascript:
   setTimeout("location.reload();",30000);
   var focused_booking = {};
+  var uid = #{session[:uid]||0};
   $(document).ready(function() {
     
     $('#calendar').fullCalendar({
@@ -37,10 +38,12 @@ javascript:
       eventClick: function(calEvent, jsEvent, view) {
         // Show popup with booking details
         focused_booking = calEvent;
+        s = moment(calEvent.start).format('ddd HH:mm');
+        e = moment(calEvent.end).format('HH:mm');
         $('#bookingModal').modal();
         $('#bookingModal .modal-title').text(calEvent.purpose + " @ " + calEvent.space);
-        $('#bookingModal .modal-body').html("booked by <b>" + calEvent.username + "</b><br>From : " + calEvent.start + "<br>To : " +  calEvent.end);
-        if (calEvent.uid == #{session[:uid]}) {
+        $('#bookingModal .modal-body').html("booked by <b>" + calEvent.username + "</b><br>" + s + " → " +  e);
+        if (calEvent.uid == uid) {
           $("#bookingModal button#remove").show();
         } else {
           $("#bookingModal button#remove").hide();
