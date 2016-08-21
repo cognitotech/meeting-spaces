@@ -38,7 +38,6 @@ namespace '/api/slack' do
       "parse"    => "full",
       "mrkdwn"   => true,
       "attachments" => [],
-      "response_type" => @output.blank? ? "ephemeral" : "in_channel",
     }
 
     # List of upcoming bookings, group by spaces
