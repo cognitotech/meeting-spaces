@@ -44,7 +44,7 @@ namespace '/api/slack' do
     # List of upcoming bookings, group by spaces
     spaces = Space.all
     spaces.each do |s|
-      bookings = s.bookings.upcoming
+      bookings = s.bookings
       a = {
         "title" => "",
         "pretext" => "`#{s.code}` *#{s.name}*",
@@ -55,7 +55,7 @@ namespace '/api/slack' do
       if bookings.count == 0
         a["text"] += "\n_• Free_" 
       else
-        bookings.upcoming.each do |b|
+        bookings.each do |b|
           if b.start_time.today?
             t = "Today #{b.start_time.strftime('%H:%M')} → #{b.end_time.strftime('%H:%M')}"
           else

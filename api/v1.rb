@@ -5,7 +5,14 @@ namespace '/api/v1' do
   end
 
   get '/bookings' do
-    return Booking.upcoming.to_json
+    return Booking.all.to_json
+  end
+
+  delete '/bookings/:id' do
+    begin
+      Booking.find(params[:id]).mark_as_cancelled
+    rescue
+    end
   end
 
   get '/spaces' do
@@ -13,7 +20,7 @@ namespace '/api/v1' do
   end
 
   get '/upcoming' do
-    Booking.upcoming.collect do |b|
+    Booking.all.collect do |b|
       {
         :id => b.id,
         :title => b.purpose + "\n" + b.user.username,
