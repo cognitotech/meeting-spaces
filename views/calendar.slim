@@ -40,6 +40,11 @@ javascript:
         $('#bookingModal').modal();
         $('#bookingModal .modal-title').text(calEvent.purpose + " @ " + calEvent.space);
         $('#bookingModal .modal-body').html("booked by <b>" + calEvent.username + "</b><br>From : " + calEvent.start + "<br>To : " +  calEvent.end);
+        if (calEvent.uid == #{session[:uid]}) {
+          $("#bookingModal button#remove").show();
+        } else {
+          $("#bookingModal button#remove").hide();
+        }
       },
       eventDragStop: function(calEvent, jsEvent, ui, view) {
         console.log(calEvent);
@@ -81,5 +86,5 @@ javascript:
       .modal-body
         p Content
       .modal-footer
-        button.btn.btn-danger type="button" onclick="javascript:removeBooking();" Remove Booking
+        button.btn.btn-danger#remove type="button" onclick="javascript:removeBooking();" Remove Booking
         button.btn.btn-default data-dismiss="modal" type="button" Close

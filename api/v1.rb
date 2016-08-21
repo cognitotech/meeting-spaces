@@ -27,6 +27,7 @@ namespace '/api/v1' do
         :start => b.start_time,
         :end   => b.end_time,
         :space => b.space.name,
+        :uid   => b.user.id,
         :purpose => b.purpose,
         :username => b.user.username,
         :backgroundColor => b.space.color,
