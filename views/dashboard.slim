@@ -2,25 +2,27 @@ H1 Users
 
 table.table.table-striped.table-bordered
   tr
+    th ID
     th Username
     th Name
-    th Role
   - @users.each do |u|
     tr
+      td= u.id
       td= u.username
       td= u.name
-      td TODO
 
 H1 Spaces
 
 table.table.table-striped.table-bordered
   tr
+    th ID
     th Code
     th Name
     th Color
     th Icon
   - @spaces.each do |s|
     tr
+      td= s.id
       td= s.code
       td= s.name
       td style="color:#{s.color}"
@@ -35,6 +37,7 @@ H1
 
 table.table.table-striped.table-bordered
   tr
+    th ID
     th Timing
     th Purpose
     th By
@@ -42,6 +45,7 @@ table.table.table-striped.table-bordered
     th Booked at
   - @bookings.each do |b|
     tr
+      td= b.id
       td
         = b.start_time.strftime '%A %H:%M'
         |  → 
