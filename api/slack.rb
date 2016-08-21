@@ -1,4 +1,4 @@
-namespace '/api' do
+namespace '/api/slack' do
 
   SYNTAX_ERROR = -1
   OVERLAP_BOOKING = 2
@@ -13,7 +13,7 @@ namespace '/api' do
     @output = ""
   end
 
-  post '/slack' do
+  post '/' do
 
     # Handle booking syntax
     if !@text.blank? && @text.split.first.downcase == "book"

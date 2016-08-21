@@ -44,7 +44,21 @@ css:
   }
 
 javascript:
-  setTimeout("location.reload();",10000);
+  setTimeout("location.reload();",30000);
+  $(document).ready(function() {
+    
+    $('#calendar').fullCalendar({
+      defaultView: 'agendaWeek',
+      selectable: true,
+      eventSources: [
+        '/api/v1/upcoming'
+      ],
+      eventClick: function(calEvent, jsEvent, view) {
+      }
+    });
+
+  });
+
 
 .filters
   a Bookings for
@@ -72,3 +86,6 @@ javascript:
         = b.start_time.strftime '%H:%M'
         |  → 
         = b.end_time.strftime '%H:%M'
+hr
+
+#calendar
