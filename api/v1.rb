@@ -31,7 +31,7 @@ namespace '/api/v1' do
     bookings.includes(:space, :user).collect do |b|
       {
         :id => b.id,
-        :title => b.purpose,
+        :title => b.purpose + "\n" + b.user.username,
         :start => b.start_time,
         :end   => b.end_time,
         :space => b.space.name,
