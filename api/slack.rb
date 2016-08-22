@@ -67,7 +67,7 @@ namespace '/api/slack' do
             t = "#{b.start_time.strftime('%a %H:%M')} → #{b.end_time.strftime('%H:%M')}"
           end
           if b.start_time > Time.now.end_of_week
-            t = "b.start_time.strftime('%d/%m') " + t
+            t = "#{b.start_time.strftime('%d/%m')} " + t
           end
           a["text"] += "\n• #{b.purpose} _(by #{b.user.name})_ - #{t}"
         end
