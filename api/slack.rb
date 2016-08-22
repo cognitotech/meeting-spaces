@@ -66,6 +66,9 @@ namespace '/api/slack' do
           else
             t = "#{b.start_time.strftime('%a %H:%M')} → #{b.end_time.strftime('%H:%M')}"
           end
+          if b.start_time > Time.now.end_of_week
+            t = "b.start_time.strftime('%d/%m') " + t
+          end
           a["text"] += "\n• #{b.purpose} _(by #{b.user.name})_ - #{t}"
         end
       end
@@ -123,7 +126,7 @@ namespace '/api/slack' do
     end
     return INVALID_DATE if end_dt == nil || end_dt <= start_dt
     return INVALID_DURATION if (end_dt - start_dt) < 15*60
-    return INVALID_DURATION if (end_dt - start_dt) > 12*3600
+    return INVALID_DURATION if (end_dt - start_dt) > 12*3600 || end_dt.day != start_dt.day
 
     # Parse purpose
     purpose = matches[4]
