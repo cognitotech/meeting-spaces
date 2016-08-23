@@ -25,12 +25,14 @@ end
 
 get '/admin' do
   @current_user = User.find_by_id(session[:uid]||0)
-  halt 401 if !@current_user || @current_user.role != User::ADMIN
-
-  @users = User.all
-  @spaces = Space.all
-  @bookings = Booking.all
-  slim :dashboard
+  if !@current_user || @current_user.role != User::ADMIN
+    halt 401
+  else
+    @users = User.all
+    @spaces = Space.all
+    @bookings = Booking.all
+    slim :dashboard
+  end
 end
 
 get '/' do
@@ -45,9 +47,12 @@ get '/' do
   end
 
   @current_user = User.find_by_id(session[:uid]||0)
-  halt 401 if !@current_user
-  @spaces = Space.all
-  slim :calendar
+  if !@current_user
+    slim :no_direct_access
+  else
+    @spaces = Space.all
+    slim :calendar
+  end
 end
 
 not_found do
