@@ -10,6 +10,7 @@ gem 'unicorn'
 gem 'slim'
 gem 'awesome_print'
 gem 'chronic'
+gem 'newrelic_rpm'
 
 gem 'pg'
 # gem 'sqlite3'
