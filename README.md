@@ -14,4 +14,4 @@ Here's to Heroku
 
 Follow instruction after you have set it up on Heroku.
 
-If you host in on your own host, visit `/slack-setup` to begin the guide.
+If you host in on your own host, visit `/slack/setup` to begin the guide.

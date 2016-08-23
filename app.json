@@ -6,7 +6,7 @@
   "repository": "https://github.com/siliconstraits/meeting-spaces",
   "logo": "http://www.siliconstraits.vn/apple-touch-icon-76x76.png",
   "keywords": ["meeting", "slack", "ruby", "sinatra"],
-  "success_url": "/slack-setup",
+  "success_url": "/slack/setup",
   "scripts": {
     "postdeploy": "bundle exec rake db:migrate"
   },

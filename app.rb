@@ -47,9 +47,3 @@ get '/calendar' do
   @spaces = Space.all
   slim :calendar
 end
-
-get '/slack-setup' do
-  slim :slack_setup
-end
-
-

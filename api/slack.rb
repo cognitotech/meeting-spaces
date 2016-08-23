@@ -1,4 +1,4 @@
-namespace '/api/slack' do
+namespace '/slack' do
 
   SYNTAX_ERROR = -1
   OVERLAP_BOOKING = 2
@@ -8,6 +8,7 @@ namespace '/api/slack' do
   INVALID_PURPOSE = 6
 
   before do
+    pass if request.path_info == '/slack/setup'
     @user = User.where(username: params[:user_name]).first_or_create
     @text = params[:text]
     @url  = params[:response_url]
@@ -15,7 +16,11 @@ namespace '/api/slack' do
     @output = ""
   end
 
-  post '/' do
+  get '/setup' do
+    slim :slack_setup
+  end
+
+  post '/hook' do
 
     # Handle booking syntax
     if !@text.blank? && @text.split.first.downcase == "book"
