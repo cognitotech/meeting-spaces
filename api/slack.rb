@@ -20,7 +20,7 @@ namespace '/slack' do
     slim :slack_setup
   end
 
-  post '/hook' do
+  post '/hook/?' do
 
     # Handle booking syntax
     if !@text.blank? && @text.split.first.downcase == "book"
@@ -45,7 +45,7 @@ namespace '/slack' do
     # Prepare payload
     token = encrypt({"uid" => @user.id}.to_json)
     payload = {
-      "text"     => "Bookings as of #{Time.now.strftime('%d/%m %H:%M')}. _<http://#{request.host}/calendar?data=#{token}|View calendar>_.",
+      "text"     => "Bookings as of #{Time.now.strftime('%d/%m %H:%M')}. _<http://#{request.host}/?data=#{token}|View calendar>_.",
       "parse"    => "full",
       "mrkdwn"   => true,
       "attachments" => [],

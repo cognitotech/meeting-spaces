@@ -22,10 +22,6 @@ Dir['./lib/*.rb', './api/*.rb', './models/*.rb'].each {|file| require file }
 class App < Sinatra::Base
 end
 
-get '/' do
-  'Hi!'
-end
-
 get '/admin' do
   @users = User.all
   @spaces = Space.all
@@ -34,6 +30,18 @@ get '/admin' do
 end
 
 get '/calendar' do
+  # Deprecated path, will remove this later
+  if !params[:data].blank?
+    begin
+      data = JSON.parse(decrypt(params[:data]))
+      session["uid"] = data["uid"]
+    rescue Exception => e
+    end
+    redirect "/"
+  end
+end
+
+get '/' do
   # Parse & clean up parameters
   if !params[:data].blank?
     begin
@@ -41,7 +49,7 @@ get '/calendar' do
       session["uid"] = data["uid"]
     rescue Exception => e
     end
-    redirect "/calendar"
+    redirect "/"
   end
 
   @spaces = Space.all
