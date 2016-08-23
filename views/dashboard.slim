@@ -1,17 +1,59 @@
+javascript:
+  $(document).ready(function(){
+    var table = $('#usersTable').DataTable({
+      "scrollY": "400px",
+      "ordering": true,
+      "searching": false,
+      "scrollCollapse": true,
+      "responsive": true,
+      "paging": false,
+    });
+
+    $('#usersTable tbody').on('click', '.role', function () {
+      var row = this.parentElement;
+      if(!$('#usersTable').hasClass("editing")){
+        $('#usersTable').addClass("editing");
+        var data = table.row(row).data();
+        var $row = $(row);
+        var thisPosition = $row.find("td:nth-child(4)");
+        var thisPositionText = thisPosition.text();
+        thisPosition.empty().append($("<select></select>",{
+          "id":"Role_" + data[0],
+          "class":"changeRole"
+        }).append(function(){
+          var options = [];
+          options.push($("<option></option>",{"text":'User',"value":0}));
+          options.push($("<option></option>",{"text":'Admin',"value":99}));
+          return options;
+        }));
+        $("#Role_" + data[0]).val(thisPositionText);
+      }
+    });
+
+    $('#usersTable tbody').on("change", ".changeRole", function(){
+      var val = $(this).val();
+      var txt = $(this).find('option:selected').text();
+      $(this).parent("td").empty().text(txt);
+      $('#usersTable').removeClass("editing");
+    });
+  });
+
 H1 Users
 
-table.table.table-striped.table-bordered
-  tr
-    th ID
-    th Username
-    th Name
-    th Role
-  - @users.each do |u|
+table.table.table-striped.table-bordered#usersTable
+  thead
     tr
-      td= u.id
-      td= u.username
-      td= u.name
-      td= u.role == User::ADMIN ? 'Admin' : 'User'
+      th ID
+      th Username
+      th Name
+      th Role
+  tbody
+    - @users.each do |u|
+      tr
+        td= u.id
+        td.username= u.username
+        td.name= u.name
+        td.role= u.role == User::ADMIN ? 'Admin' : 'User'
 
 H1 Spaces
 
