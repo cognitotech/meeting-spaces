@@ -37,8 +37,8 @@ get '/calendar' do
       session["uid"] = data["uid"]
     rescue Exception => e
     end
-    redirect "/"
   end
+  redirect "/"
 end
 
 get '/' do
@@ -52,6 +52,7 @@ get '/' do
     redirect "/"
   end
 
+  @current_user = User.find(session["uid"])
   @spaces = Space.all
   slim :calendar
 end

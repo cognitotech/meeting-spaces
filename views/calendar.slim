@@ -88,11 +88,14 @@ javascript:
   - Space.all.each do |s|
     a style="background-color:#{s.color}"= s.name
   button.btn.btn-info.btn-xs.pull-right data-toggle="modal" data-target="#helpModal" type="button" ?
-  - if !session[:uid].blank?
+  - if @current_user
     hr.visible-xs-block
+    - if @current_user.role == User::ADMIN
+      .btn.btn-xs.pull-right href='/admin'
+        | /admin
     .btn.btn-xs.pull-right
       | Logged in as 
-      b= User.find(session[:uid]).username
+      b= @current_user.username
 
 
 #bookingModal.modal.fade role="dialog" tabindex="-1"
