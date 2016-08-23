@@ -88,7 +88,8 @@ namespace '/slack' do
         "text" => "#{@cmd} book `#{Space.first.code}` from `4pm` to `6pm` for `Meeting's purpose`\n
 #{@cmd} book `#{Space.first.code }` from `Friday 4pm` to `6pm` for `Client Visit`\n
 #{@cmd} book `#{Space.last.code }` `tomorrow 4pm` for `Interview` _(this will book 1 hour slot)_\n
-#{@cmd} book `#{Space.last.code }` `next Tue 2pm` for `Discussion` _(advance booking)_",
+#{@cmd} book `#{Space.last.code }` `next Tue 2pm` for `Discussion` _(advance booking)_\n
+#{@cmd} book `#{Space.last.code }` from `#{(Time.now+14*24*3600).strftime('%d/%m')} 10am` for `Daily standup` _(specific date)_",
         "color" => "#CCC",
         "mrkdwn_in": ["text", "pretext"]
       }
