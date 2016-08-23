@@ -23,6 +23,9 @@ class App < Sinatra::Base
 end
 
 get '/admin' do
+  @current_user = User.find_by_id(session[:uid]||0)
+  halt 401 if !@current_user || @current_user.role != User::ADMIN
+
   @users = User.all
   @spaces = Space.all
   @bookings = Booking.all
@@ -34,7 +37,7 @@ get '/calendar' do
   if !params[:data].blank?
     begin
       data = JSON.parse(decrypt(params[:data]))
-      session["uid"] = data["uid"]
+      session[:uid] = data["uid"]
     rescue Exception => e
     end
   end
@@ -46,13 +49,13 @@ get '/' do
   if !params[:data].blank?
     begin
       data = JSON.parse(decrypt(params[:data]))
-      session["uid"] = data["uid"]
+      session[:uid] = data["uid"]
     rescue Exception => e
     end
     redirect "/"
   end
 
-  @current_user = User.find(session["uid"])
+  @current_user = User.find_by_id(session[:uid]||0)
   @spaces = Space.all
   slim :calendar
 end

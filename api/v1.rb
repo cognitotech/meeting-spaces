@@ -10,8 +10,15 @@ namespace '/api/v1' do
 
   delete '/bookings/:id' do
     begin
-      Booking.find(params[:id]).mark_as_cancelled
+      u = User.find(session[:uid])
+      b = Booking.find(params[:id])
+      if u.role == User::ADMIN || b.user == u
+        b.mark_as_cancelled
+      else
+        halt 401, "Unauthorized ;)"
+      end
     rescue
+      halt 401, "Unauthorized ;)"
     end
   end
 

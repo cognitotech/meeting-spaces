@@ -24,9 +24,10 @@ css:
 javascript:
   setTimeout("location.reload();", 60000);
   var focused_booking = {};
-  var uid = #{session[:uid]||0};
+  var uid = #{@current_user.id||0};
+  var isAdmin = #{@current_user.isAdmin?}
   $(document).ready(function() {
-    
+
     $('#calendar').fullCalendar({
       defaultView: 'agendaWeek',
       firstDay: 1, // Mon
@@ -54,7 +55,7 @@ javascript:
         $('#bookingModal').modal();
         $('#bookingModal .modal-title').text(calEvent.purpose + " @ " + calEvent.space);
         $('#bookingModal .modal-body').html("<i>booked by <b>" + calEvent.username + "</b></i><br>" + s + " → " +  e);
-        isOwner = calEvent.uid == uid;
+        isOwner = isAdmin || calEvent.uid == uid;
         $("#bookingModal button#remove").toggle(isOwner);
         $("#bookingModal button#owner").toggle(!isOwner);
       },
@@ -91,7 +92,7 @@ javascript:
   - if @current_user
     hr.visible-xs-block
     - if @current_user.role == User::ADMIN
-      .btn.btn-xs.pull-right href='/admin'
+      a.btn.btn-xs.pull-right href='/admin'
         | /admin
     .btn.btn-xs.pull-right
       | Logged in as 
