@@ -1,0 +1,35 @@
+#!/bin/bash
+#import_db.sh: a bash script that imports from your heroku app the latest postgres db schema dump and imports it to
+#the specified db schema name
+RED="\x1b[31m"
+GREEN="\x1b[32m"
+COLOR_RESET="\x1b[0m"
+DUMP_FILENAME="latest.dump"
+
+usage() {
+  echo "You should run this command inside a current Git repo: $0 postgres_db_name"
+  exit 1
+}
+
+echo_with_color() {
+  echo -e "$2$1$COLOR_RESET"
+}
+
+# call usage() function if no db name is supplied
+[[ $# -eq 0 ]] && usage
+
+HAS_HEROKU_REMOTE=$(heroku info 2>&1 > /dev/null)
+if [ ! -z "$HAS_HEROKU_REMOTE" ]; then
+  echo_with_color "You need to add the app's heroku remote to git in order for heroku to be setup" $RED 
+  exit 0
+else
+  echo_with_color "Beginning import..." $GREEN
+  echo_with_color "Fetching from heroku the latest dump and saving it into $DUMP_FILENAME" $GREEN
+  heroku pg:backups capture
+  curl -o $DUMP_FILENAME `heroku pg:backups public-url`
+  echo_with_color "Restoring the dump to $1" $GREEN
+  pg_restore --verbose --clean --no-acl --no-owner -h localhost -d $1 $DUMP_FILENAME
+  echo_with_color "Deleting the dump file..." $GREEN
+  rm $DUMP_FILENAME
+  echo_with_color "Import completed successfully!" $GREEN
+fi
