@@ -24,8 +24,8 @@ css:
 javascript:
   setTimeout("location.reload();", 60000);
   var focused_booking = {};
-  var uid = #{@current_user.id||0};
-  var isAdmin = #{@current_user.isAdmin?}
+  var uid = #{@current_user ? @current_user.id : 0};
+  var isAdmin = #{@current_user && @current_user.isAdmin?}
   $(document).ready(function() {
 
     $('#calendar').fullCalendar({
