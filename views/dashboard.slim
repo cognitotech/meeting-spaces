@@ -5,11 +5,13 @@ table.table.table-striped.table-bordered
     th ID
     th Username
     th Name
+    th Role
   - @users.each do |u|
     tr
       td= u.id
       td= u.username
       td= u.name
+      td= u.role == User::ADMIN ? 'Admin' : 'User'
 
 H1 Spaces
 
