@@ -14,6 +14,7 @@ require 'digest/sha2'
 
 # Global configs
 enable :sessions
+set :public_folder, 'public'
 ActiveRecord::Base.default_timezone = :local
 
 # Load APIs & Models
@@ -32,18 +33,6 @@ get '/admin' do
   slim :dashboard
 end
 
-get '/calendar' do
-  # Deprecated path, will remove this later
-  if !params[:data].blank?
-    begin
-      data = JSON.parse(decrypt(params[:data]))
-      session[:uid] = data["uid"]
-    rescue Exception => e
-    end
-  end
-  redirect "/"
-end
-
 get '/' do
   # Parse & clean up parameters
   if !params[:data].blank?
@@ -56,6 +45,19 @@ get '/' do
   end
 
   @current_user = User.find_by_id(session[:uid]||0)
+  halt 401 if !@current_user
   @spaces = Space.all
   slim :calendar
+end
+
+not_found do
+  redirect "/404.html"
+end
+
+error 401 do
+  redirect "/401.html"
+end
+
+error do
+  redirect "/500.html"
 end
