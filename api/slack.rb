@@ -137,6 +137,7 @@ namespace '/slack' do
 
     # Parse purpose
     purpose = matches[4]
+    purpose = purpose[0..35]
     return INVALID purpose if purpose.length < 3
 
     # Create a temp booking
