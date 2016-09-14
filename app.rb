@@ -47,7 +47,10 @@ get '/' do
   end
 
   @current_user = User.find_by_id(session[:uid]||0)
-  if !@current_user && params[:device] != 'tablet'
+  if params[:device] == 'tablet'
+    @current_user = User.new(id:0, name:'guest')
+    slim :calendar
+  elsif !@current_user
     slim :no_direct_access
   else
     @spaces = Space.all
