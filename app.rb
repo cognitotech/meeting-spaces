@@ -47,7 +47,7 @@ get '/' do
   end
 
   @current_user = User.find_by_id(session[:uid]||0)
-  if !@current_user
+  if !@current_user && params[:device] != 'tablet'
     slim :no_direct_access
   else
     @spaces = Space.all
