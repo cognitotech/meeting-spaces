@@ -122,8 +122,8 @@ namespace '/slack' do
     spc = Space.find_by_code(matches[0].upcase)
     return INVALID_SPACE if spc == nil
 
-    # Parse start datetime
-    start_dt = Chronic.parse(matches[2], now: Time.now)
+    # Parse start datetime (with a grace period)
+    start_dt = Chronic.parse(matches[2], now: (Time.now-15*60) )
     return INVALID_DATE if start_dt == nil || start_dt < Time.now
 
     # Parse end datetime (or assume 1 hour)
